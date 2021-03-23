@@ -9,7 +9,8 @@ const { User } = require("./models/User");
 const config = require("./config/key");
 
 const cookieParser = require("cookie-parser");
-
+//미들웨어 가져오기
+const { authMiddleWare } = require("./middleware/auth");
 
 /* body parser를 이용 */
 //application/x-www-form-urlencoded 로 된 부분을 분석해서 가져올 수 있게 해줌
@@ -34,7 +35,7 @@ mongoose.connect(config.mongoURI, {
 app.get("/", (req, res) => res.send("node mon 적용"));
 
 //회원가입
-app.post("/register", (req, res) => {
+app.post("/api/register", (req, res) => {
 
     //회원 가입 할 때 필요한 정보들을 client에서 가져요면 그것들을 데이터 베이스에 넣어준다.
     //req.body => body parser 를 이용해서 받음
@@ -53,7 +54,7 @@ app.post("/register", (req, res) => {
 })
 
 //로그인
-app.post("/login", (req, res) => {
+app.post("/api/login", (req, res) => {
     //요청된 이메일을 데이터베이스에서 있는지 찾기
     User.findOne({ email: req.body.email }, (err, user) => {
 
@@ -101,6 +102,27 @@ app.post("/login", (req, res) => {
 
 
 });
+
+
+//생성된 token을 비교하여 page 이동 때 마다 인증과정이 이루어지는 부분
+//auth라는 middle ware 추가
+app.get("/api/users/auth", authMiddleWare, (req, res) => {
+
+
+    //미들웨어 성공 후 나서 작업 선택해서 데이터 가공 후 전송
+    res.status(200).json({
+        _id: req.user_.id
+        , isAdmin: req.user.role === 0 ? false : true
+        , usAuth: true
+        , email: req.user.email
+        , lastname: req.user.lastname
+        , role: req.user.role
+        , image: req.user.image
+    });
+})
+
+
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 

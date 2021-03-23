@@ -109,6 +109,27 @@ userSchema.methods.makeToken = function (cb) {
 }
 
 
+//token과 callback함수를 매개변수로 받는 익명의 함수
+userSchema.statics.findByToken = function (token, cb) {
+    var user = this;
+
+
+    //토큰을 decode 한다
+    //json web token 홈페이지를 참조
+    //토큰을 생성했 을 때 넣어줬던 "secretToken"을 2번째 인자로 넣어줌
+    //decoded : 디코드된 user_.id가 나옴 ( secretToken )을 제외한
+    jwt.verify(token, 'secretToken', function (err, decoded) {
+
+        //디코드전 토큰와 디코드 된 후 user_.id 와 일치하는 user 찾기
+        user.findOne({
+            "_id": decoded
+            , "token": token
+        })
+    });
+
+}
+
+
 //model에 User 스키마 추가
 const User = mongoose.model('User', userSchema);
 //User 스키마 export.
