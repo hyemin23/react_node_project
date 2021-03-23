@@ -1,8 +1,10 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 
+const bcrypt = require("bcrypt");
 //비밀번호 10자리 이상
 const saltRounds = 10;
+
+const jwt = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema({
     name: {
@@ -70,6 +72,44 @@ userSchema.pre('save', function (next) {
     }
 });
 
+//메소드를 만들 수 있음
+userSchema.methods.comparePassword = function (plainPassword, cb) {
 
+    //암호화 전 비번과 암호화된 db비번 비교
+    bcrypt.compare(plainPassword, this.password, function (err, isMatch) {
+        //에러가 있으면 cb함수에 err 넣기
+        if (err) return cb(err);
+
+        //에러가 없으면 cb함수에 err = null, isMatch(boolean) 넣기
+        cb(null, isMatch);
+    })
+}
+
+//토큰 만드는 메서드 추가
+//cb는 = function(err,user) 를 의미
+userSchema.methods.makeToken = function (cb) {
+
+    var user = this;
+
+    //json-webtoken을 이용해서 토큰 생성
+    //순수 Object로 변환 후 보내야하므로 toHexString()사용
+    //user._id : mogodb에 있는 id 값을 의미.
+    //user._id + 'sercretToken' = token 생성이됨
+    var token = jwt.sign(user._id.toHexString(), 'secretToken');
+
+    //만들어진 token을 user token에 저장
+    user.token = token;
+    user.save(function (err, user) {
+        if (err) return cb(err);
+
+        //cb = function(err,user)의미 따라서 null,성공한user정보를 보냄
+        cb(null, user);
+
+    });
+}
+
+
+//model에 User 스키마 추가
 const User = mongoose.model('User', userSchema);
+//User 스키마 export.
 module.exports = { User }
