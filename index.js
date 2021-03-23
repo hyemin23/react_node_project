@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 
 
 const { User } = require("./models/User");
+const config = require("./config/key");
 
 
 /* body parser를 이용 */
@@ -17,7 +18,8 @@ app.use(bodyParser.json());
 
 
 //몽고 DB 연결 부분
-mongoose.connect('mongodb+srv://hyemin:a4848684@reactnodeproject.cg6ah.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+//config.mongoURI로 가져온다.
+mongoose.connect(config.mongoURI, {
     useNewUrlParser: true
     , useUnifiedTopology: true
     , useCreateIndex: true
