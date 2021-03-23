@@ -124,8 +124,18 @@ app.get("/api/users/auth", authMiddleWare, (req, res) => {
 //로그아웃 = 로그인된 상태를 의미
 app.post("/api/users/logout", authMiddleWare, (req, res) => {
 
+    console.log(res.user);
     //로그인 된 상태이므로 로그인한 토큰 지워주기
-    User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+    //몽구스의findOneAndUpdate는 첫 번째 인자로는 ,업데이트할 id 값을 넣는다.
+    //두 번째 인자로는 업데이트할 필드를 넣는다.
+    //세 번째 인자는 callback 함수이다.
+    User.findOneAndUpdate(
+        {
+            _id: req.user._id,
+
+        }, {
+        token: ""
+    }, (err, user) => {
         if (err) return res.json({ success: false, err });
         return res.status(200).send({
             success: true

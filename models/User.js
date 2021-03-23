@@ -110,22 +110,41 @@ userSchema.methods.makeToken = function (cb) {
 
 
 //token과 callback함수를 매개변수로 받는 익명의 함수
+//https://www.inflearn.com/questions/30860 
+//methods와 statics의 차이점
 userSchema.statics.findByToken = function (token, cb) {
+
+    //arrow function은 var user = this 안적어도 됨 전역객체 참조하므로
     var user = this;
-
-
     //토큰을 decode 한다
     //json web token 홈페이지를 참조
     //토큰을 생성했 을 때 넣어줬던 "secretToken"을 2번째 인자로 넣어줌
     //decoded : 디코드된 user_.id가 나옴 ( secretToken )을 제외한
-    jwt.verify(token, 'secretToken', function (err, decoded) {
 
-        //디코드전 토큰와 디코드 된 후 user_.id 와 일치하는 user 찾기
+    jwt.verify(token, 'secretToken', function (err, decode) {
+
         user.findOne({
-            "_id": decoded
+            "_id": decode
             , "token": token
-        })
+        }, function (err, user) {
+            console.log(user);
+            if (err) return cb(err);
+            return cb(null, user);
+        });
     });
+
+    //디코드전 토큰와 디코드 된 후 user_.id 와 일치하는 user 찾기
+    // user.findOne({
+    //     "_id": decoded
+    //     , "token": token
+    // }, function (err, user) {
+    //     console.log("err user", err, user);
+    //     if (err) return cb(err);
+
+    //     //찾은 user 전달
+    //     cb(null, user)
+    // });
+
 
 }
 
