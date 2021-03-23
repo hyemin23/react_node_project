@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 5000;
+const port = 5006;
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 
@@ -37,7 +37,7 @@ app.post("/register", (req, res) => {
     //req.body => body parser 를 이용해서 받음
     const user = new User(req.body);
 
-    //user.save() => user model에 저장시킴.
+    //user.save() => user model에 저장시킴. 그 전에 pre()를 탐
     user.save((err, userInfo) => {
         if (err) return res.json({ success: false, err })
 
