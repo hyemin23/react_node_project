@@ -1,7 +1,7 @@
 const User = require("../models/User");
 
+//인증 처리를 하는 곳
 let authMiddleWare = (req, res, next) => {
-    //인증 처리를 하는 곳
 
     //1. client cookie에서 token을 (x_auth라고 넣음) 가져온다 -> cookie parser 이용
     let token = req.cookie.x_auth;

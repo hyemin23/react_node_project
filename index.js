@@ -111,7 +111,7 @@ app.get("/api/users/auth", authMiddleWare, (req, res) => {
 
     //미들웨어 성공 후 나서 작업 선택해서 데이터 가공 후 전송
     res.status(200).json({
-        _id: req.user_.id
+        _id: req.user._id
         , isAdmin: req.user.role === 0 ? false : true
         , usAuth: true
         , email: req.user.email
@@ -121,6 +121,17 @@ app.get("/api/users/auth", authMiddleWare, (req, res) => {
     });
 })
 
+//로그아웃 = 로그인된 상태를 의미
+app.post("/api/users/logout", authMiddleWare, (req, res) => {
+
+    //로그인 된 상태이므로 로그인한 토큰 지워주기
+    User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
+        if (err) return res.json({ success: false, err });
+        return res.status(200).send({
+            success: true
+        });
+    });
+});
 
 
 
