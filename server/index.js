@@ -12,6 +12,7 @@ const cookieParser = require("cookie-parser");
 //미들웨어 가져오기
 const { authMiddleWare } = require("./middleware/auth");
 
+//cors 문제 해결
 const cors = require("cors");
 
 /* body parser를 이용 */
@@ -153,7 +154,7 @@ app.get("/api/test", (req, res) => {
     res.send("테스트 성공입니다 ~!");
 });
 
-const port = 5010;
+const port = 5000;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 
