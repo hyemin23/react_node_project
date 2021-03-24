@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const port = 5006;
+
 const mongoose = require('mongoose');
 const bodyParser = require("body-parser");
 
@@ -12,6 +12,8 @@ const cookieParser = require("cookie-parser");
 //미들웨어 가져오기
 const { authMiddleWare } = require("./middleware/auth");
 
+const cors = require("cors");
+
 /* body parser를 이용 */
 //application/x-www-form-urlencoded 로 된 부분을 분석해서 가져올 수 있게 해줌
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,6 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 //쿠키 파서 사용 명시
 app.use(cookieParser());
+app.use(cors());
 
 //몽고 DB 연결 부분
 //config.mongoURI로 가져온다.
@@ -146,10 +149,11 @@ app.post("/api/users/logout", authMiddleWare, (req, res) => {
 
 //프론트 통신 테스트
 app.get("/api/test", (req, res) => {
+    console.log("api test 들어옴");
     res.send("테스트 성공입니다 ~!");
 });
 
-
+const port = 5010;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 
