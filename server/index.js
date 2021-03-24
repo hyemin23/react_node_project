@@ -144,6 +144,11 @@ app.post("/api/users/logout", authMiddleWare, (req, res) => {
 });
 
 
+//프론트 통신 테스트
+app.get("/api/test", (req, res) => {
+    res.send("테스트 성공입니다 ~!");
+});
+
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
