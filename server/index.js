@@ -132,9 +132,8 @@ app.get("/api/users/auth", authMiddleWare, (req, res) => {
 })
 
 //로그아웃 = 로그인된 상태를 의미
-app.post("/api/users/logout", authMiddleWare, (req, res) => {
-
-    console.log(res.user);
+app.get("/api/users/logout", authMiddleWare, (req, res) => {
+    console.log("로그아웃");
     //로그인 된 상태이므로 로그인한 토큰 지워주기
     //몽구스의findOneAndUpdate는 첫 번째 인자로는 ,업데이트할 id 값을 넣는다.
     //두 번째 인자로는 업데이트할 필드를 넣는다.

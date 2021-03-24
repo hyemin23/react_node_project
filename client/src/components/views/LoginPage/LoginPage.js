@@ -33,7 +33,7 @@ function LoginPage(props) {
             , password: password
         }
 
-
+        //reducer에 있는 return 값이 옴 
         dispatch(loginUser(body))
             .then(response => {
                 if (response.payload.loginSuccess) {
@@ -42,8 +42,6 @@ function LoginPage(props) {
                     alert('Error˝')
                 }
             })
-
-
     }
 
 

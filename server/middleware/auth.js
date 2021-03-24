@@ -3,8 +3,11 @@ const { User } = require("../models/User");
 //인증 처리를 하는 곳
 let authMiddleWare = (req, res, next) => {
 
+    console.log("미들웨어");
+
     //1. client cookie에서 token을 (x_auth라고 넣음) 가져온다 -> cookie parser 이용
     let token = req.cookies.x_auth;
+    console.log(req.cookies.x_auth);
 
     //2. 가져온 토큰을 복호화한 후 user를 찾는다
     //findByToken() 메서드 생성
