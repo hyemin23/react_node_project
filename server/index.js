@@ -39,7 +39,7 @@ mongoose.connect(config.mongoURI, {
 app.get("/", (req, res) => res.send("node mon 적용"));
 
 //회원가입
-app.post("/api/register", (req, res) => {
+app.post("/api/users/register", (req, res) => {
 
     //회원 가입 할 때 필요한 정보들을 client에서 가져요면 그것들을 데이터 베이스에 넣어준다.
     //req.body => body parser 를 이용해서 받음
@@ -58,12 +58,17 @@ app.post("/api/register", (req, res) => {
 })
 
 //로그인
-app.post("/api/login", (req, res) => {
+app.post("/api/users/login", (req, res) => {
+    console.log("백엔드 로그인 ");
+    console.log(req.body);
+    console.log(req.body.email);
+
     //요청된 이메일을 데이터베이스에서 있는지 찾기
     User.findOne({ email: req.body.email }, (err, user) => {
 
         // 이메일이 없는 경우
         if (!user) {
+            console.log("유저 없음");
             return res.json({
                 loginSuccess: false
                 , message: "해당하는 유저가 없습니다."
@@ -77,6 +82,7 @@ app.post("/api/login", (req, res) => {
 
             //비밀번호가 없으면
             if (!isMatch) {
+                console.log("비번 매칭 실패");
                 return res.json({
                     loginSuccess: false
                     , message: "비밀번호가 맞지 않습니다."
@@ -154,7 +160,7 @@ app.get("/api/test", (req, res) => {
     res.send("테스트 성공입니다 ~!");
 });
 
-const port = 5000;
+const port = 5014;
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));
 
 
