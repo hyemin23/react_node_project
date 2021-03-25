@@ -95,7 +95,7 @@ userSchema.methods.makeToken = function (cb) {
     //순수 Object로 변환 후 보내야하므로 toHexString()사용
     //user._id : mogodb에 있는 id 값을 의미.
     //user._id + 'sercretToken' = token 생성이됨
-    var token = jwt.sign(user._id.toHexString(), 'secretToken');
+    var token = jwt.sign(user._id.toHexString(), 'secretToken')
 
     //만들어진 token을 user token에 저장
     user.token = token;
@@ -107,7 +107,6 @@ userSchema.methods.makeToken = function (cb) {
 
     });
 }
-
 
 //token과 callback함수를 매개변수로 받는 익명의 함수
 //https://www.inflearn.com/questions/30860 
@@ -124,10 +123,8 @@ userSchema.statics.findByToken = function (token, cb) {
     jwt.verify(token, 'secretToken', function (err, decode) {
 
         user.findOne({
-            "_id": decode
-            , "token": token
+            "token": token
         }, function (err, user) {
-            console.log(user);
             if (err) return cb(err);
             return cb(null, user);
         });

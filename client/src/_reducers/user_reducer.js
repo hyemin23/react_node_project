@@ -1,4 +1,5 @@
 import {
+    AUTH_USER,
     LOGIN_USER,
     REGISTER_USER
 
@@ -15,6 +16,10 @@ export default function userReducer(state = {}, action) {
         case REGISTER_USER:
             return {
                 ...state, success: action.payload
+            }
+        case AUTH_USER:
+            return {
+                ...state, userData: action.payload
             }
         default:
             return state;

@@ -92,18 +92,16 @@ app.post("/api/users/login", (req, res) => {
             //몽고 디비 메서드 토큰 만드는 메서드 생성 .비밀번호가 맞다면 토큰을 생성하기.
             user.makeToken((err, user) => {
                 //에러가 있다면 client에게 전달
-                if (err) {
-                    return res.status(400).send(err);
-                }
+                if (err) return res.status(400).send(err);
 
                 //쿠키 or localStorage or Session 에 토큰 저장
                 //쿠키에 저장하려면 라이브러리 필요
                 //"x_auth"라는 이름으로 쿠키 생성
                 //쿠키 저장이 성공시
-                res.cookie("x_auth", user.token).status(200).json({
-                    loginSuccess: true
-                    , userId: user._id
-                });
+
+                res.cookie("x_auth", user.token)
+                    .status(200)
+                    .json({ loginSuccess: true, userId: user._id })
             });
 
         });
